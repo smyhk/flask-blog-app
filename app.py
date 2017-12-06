@@ -94,6 +94,11 @@ def validateLogin():
         conn.close()
 
 
+@app.route('/showAddBlog')
+def showAddBlog():
+    return render_template('addBlog.html')
+
+
 @app.route('/logout')
 def logout():
     session.pop('user', None)
