@@ -55,3 +55,31 @@ CREATE TABLE `tbl_blog` (
   PRIMARY KEY (`blog_id`)
 )
 ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+USE `FlaskBlogApp`;
+DROP procedure IF EXISTS `FlaskBlogApp`.`sp_addBlog`;
+
+DELIMITER $$
+USE `FlaskBlogApp`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_addBlog`(
+    IN p_title varchar(45),
+    IN p_description varchar(1000),
+    IN p_user_id bigint
+)
+BEGIN
+    insert into tbl_blog(
+        blog_title,
+        blog_description,
+        blog_user_id,
+        blog_date
+    )
+    values
+    (
+        p_title,
+        p_description,
+        p_user_id,
+        NOW()
+    );
+END$$
+
+DELIMITER ;

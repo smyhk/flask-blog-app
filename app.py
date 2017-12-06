@@ -99,6 +99,31 @@ def showAddBlog():
     return render_template('addBlog.html')
 
 
+@app.route('/addBlog',methods=['POST'])
+def addBlog():
+    if session.get("user"):
+        try:
+            _title = request.form['inputTitle']
+            _description = request.form['inputDescription']
+            _user = session.get('user')
+
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.callproc('sp_addBlog', (_title, _description, _user))
+            data = cursor.fetchall()
+
+            if len(data) is 0:
+                conn.commit()
+                return redirect('/userHome')
+            else:
+                return render_template('error.html', error='An error occurred!')
+        except Exception as e:
+            return render_template('error.html', error=str(e))
+        finally:
+            cursor.close()
+            conn.close()
+
+
 @app.route('/logout')
 def logout():
     session.pop('user', None)
