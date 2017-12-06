@@ -53,4 +53,5 @@ CREATE TABLE `tbl_blog` (
   `blog_user_id` int(11) DEFAULT NULL,
   `blog_date` datetime DEFAULT NULL,
   PRIMARY KEY (`blog_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+)
+ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
