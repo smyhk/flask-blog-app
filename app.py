@@ -99,7 +99,7 @@ def showAddBlog():
     return render_template('addBlog.html')
 
 
-@app.route('/addBlog',methods=['POST'])
+@app.route('/addBlog', methods=['POST'])
 def addBlog():
     if session.get("user"):
         try:
@@ -122,6 +122,36 @@ def addBlog():
         finally:
             cursor.close()
             conn.close()
+
+
+@app.route('/getBlog')
+def getBlog():
+    try:
+        if session.get('user'):
+            _user = session.get('user')
+
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.callproc('sp_GetBlogByUser', (_user,))
+            blogs = cursor.fetchall()
+
+            blogs_dict = []
+            for blog in blogs:
+                blog_dict = {
+                        'Id': blog[0],
+                        'Title': blog[1],
+                        'Description': blog[2],
+                        'Date': blog[4]}
+                blogs_dict.append(blog_dict)
+
+            return json.dumps(blogs_dict)
+        else:
+            return render_template('error.html', error='Unauthorized Access')
+    except Exception as e:
+        return render_template('error.html', error=str(e))
+    finally:
+        cursor.close()
+        conn.close()
 
 
 @app.route('/logout')
